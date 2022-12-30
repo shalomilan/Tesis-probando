@@ -203,7 +203,7 @@ cam.op %>% is.na() %>% table() #me dice cu?ntos valores son NA.
 cam.op[is.na(cam.op)] = 0
 cam.op <- data.frame(cam.op)
 ##################################### Activity histogram ###################################
-hist.activ.all <- activityHistogram (recordTable = datacam, 
+hist.activ.all <- activityHistogram (recordTable = datacam_muestreo, 
                                     recordDateTimeCol = "DateTimeOriginal" ,
                                     species = "axis",
                                     allSpecies = FALSE,
@@ -213,7 +213,7 @@ hist.activ.all <- activityHistogram (recordTable = datacam,
 #que se llama datacam, mirando la columna Time, para todas las especies
 
 ## Activity Density Plot based on Kernel Density Estimation of Diel Activity
-ActDens.all <- activityDensity(recordTable = datacam, 
+ActDens.all <- activityDensity(recordTable = datacam_muestreo, 
                                allSpecies = TRUE,
                                writePNG = FALSE, #le puse TRUE una vez para tener los gráficos en mi compu
                                #plotDirectory = "D:/TESIS/Densidad_actividad",
@@ -327,6 +327,8 @@ moon <- readPNG("moon.png")
 especie1 <- registers %>% 
    filter(Species == "axis") #ESPECIE QUE QUIERO
 
+ymax = 2000
+
 (plot_blanco <- ggplot(especie1, aes(x = decimal)) + 
       geom_histogram(breaks = seq(0, 24),
                      #aes(y = stat(count / sum(count))), #Esta línea me pone el eje y en proporción
@@ -334,7 +336,7 @@ especie1 <- registers %>%
                      colour = "black", 
                      size = 0.3) +
       scale_x_continuous("", limits = c(0, 24), breaks = seq(0, 24), labels = seq(0, 24)) +
-   labs(title = "Registros de *Mazama gouarzoubira*", 
+   labs(title = "Registros de *Axis axis*", 
         #subtitle = "En los muestreos de jl17 y jl18", #NOMBRE DE LA ESPECIE QUE QUIERO
         y = "Número de registros") +
    coord_polar(start = 0) +
@@ -348,11 +350,11 @@ especie1 <- registers %>%
 (plot_color <- plot_blanco +
    annotate("rect", #Sombreado gris
             xmin = c(18,0), xmax = c(24, 6.5),
-            ymin = 0, ymax = 60, #VARIAR EL VALOR DE YMAX CON LA ESPECIE
+            ymin = 0, ymax = ymax, #VARIAR EL VALOR DE YMAX CON LA ESPECIE
             alpha = 0.3, fill = "grey25") + 
    annotate("rect", #Sombreado amarillo
             xmin = 6, xmax = 19,
-            ymin = 0, ymax = 60, #VARIAR EL VALOR DE YMAX CON LA ESPECIE
+            ymin = 0, ymax = ymax, #VARIAR EL VALOR DE YMAX CON LA ESPECIE
             alpha = 0.3, fill = "#FFD819"))
 
 ggdraw(plot_color) +
